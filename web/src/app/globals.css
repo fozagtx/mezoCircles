@@ -1,0 +1,174 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* === RADIUS === */
+  --radius: 0.5rem;
+  --radius-2xl: 1rem;
+  --radius-full: 9999px;
+
+  /* === SEMANTIC COLORS === */
+  --background:          oklch(98% .003 85);
+  --foreground:          oklch(12% .01 60);
+
+  --card:                oklch(100% 0 0);
+  --card-foreground:     oklch(12% .01 60);
+
+  --popover:             oklch(100% 0 0);
+  --popover-foreground:  oklch(12% .01 60);
+
+  --primary:             oklch(54% .22 25);
+  --primary-foreground:  oklch(100% 0 0);
+
+  --secondary:           oklch(96% .01 85);
+  --secondary-foreground: oklch(12% .01 60);
+
+  --muted:               oklch(96% .01 85);
+  --muted-foreground:    oklch(55% .016 286);
+
+  --accent:              oklch(96% .01 85);
+  --accent-foreground:   oklch(12% .01 60);
+
+  --destructive:         oklch(57.7% .245 27.325);
+  --destructive-foreground: oklch(98.5% 0 0);
+
+  --border:              oklch(92% .004 286);
+  --input:               oklch(92% .004 286);
+  --ring:                oklch(54% .22 25);
+
+  /* === BRAND === */
+  --brand-black:     #1A1A18;
+  --brand-red:       #E5322D;
+  --brand-red-dark:  #c42a25;
+  --brand-grey:      #333333;
+
+  /* === DARK TERMINAL SURFACES === */
+  --surface-dark-1:  #1a1d23;
+  --surface-dark-2:  #161920;
+  --surface-dark-3:  #0d1117;
+  --surface-dark-4:  #161b22;
+}
+
+html, body {
+  background: var(--background);
+  color: var(--foreground);
+  min-height: 100%;
+}
+
+body {
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.75;
+  letter-spacing: -0.01em;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5
+           font-medium text-sm transition active:scale-[0.98]
+           disabled:opacity-50 disabled:cursor-not-allowed
+           rounded-full;
+    font-family: "JetBrains Mono", monospace;
+  }
+  .btn-primary {
+    @apply btn text-white;
+    background: var(--brand-black);
+  }
+  .btn-primary:hover { background: var(--brand-grey); }
+
+  .btn-red {
+    @apply btn text-white;
+    background: var(--brand-red);
+  }
+  .btn-red:hover { background: var(--brand-red-dark); }
+
+  .btn-ghost {
+    @apply btn bg-transparent;
+    color: var(--foreground);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { background: var(--secondary); }
+
+  .card {
+    @apply rounded-lg p-4;
+    background: var(--card);
+    color: var(--card-foreground);
+    border: 1px solid var(--border);
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .input {
+    @apply w-full rounded-lg px-3 py-2.5 text-sm placeholder:text-[color:var(--muted-foreground)]
+           focus:outline-none focus:ring-2;
+    background: var(--card);
+    color: var(--foreground);
+    border: 1px solid var(--input);
+    --tw-ring-color: var(--ring);
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  .nav-active {
+    color: var(--brand-red);
+    background: rgba(254, 226, 226, 0.5);
+    border-radius: 8px;
+  }
+
+  .terminal {
+    background: var(--surface-dark-3);
+    color: #4ade80;
+    font-family: "JetBrains Mono", monospace;
+    border-radius: var(--radius);
+    padding: 12px 16px;
+  }
+}
+
+/* === ANIMATIONS === */
+@keyframes ticker-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes cta-pulse {
+  0%   { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 0;   transform: scale(1.15); }
+}
+@keyframes shimmer {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes fadeSlideIn {
+  0%   { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in-up {
+  0%   { opacity: 0; transform: translateY(24px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes caret-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.animate-fade-in-up { animation: fade-in-up 0.5s ease forwards; }
+.animate-fade-slide { animation: fadeSlideIn 0.4s ease forwards; }
+.caret::after {
+  content: "▎";
+  animation: caret-blink 1s step-end infinite;
+  margin-left: 2px;
+  color: var(--brand-red);
+}
+
+/* Top brand strip */
+.brand-strip {
+  background: linear-gradient(90deg, var(--brand-red), var(--brand-black), var(--brand-red));
+  background-size: 200% 100%;
+  animation: ticker-left 12s linear infinite;
+}

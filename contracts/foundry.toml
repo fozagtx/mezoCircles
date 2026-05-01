@@ -1,0 +1,17 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc_version = "0.8.24"
+optimizer = true
+optimizer_runs = 200
+remappings = [
+    "@openzeppelin/=lib/openzeppelin-contracts/",
+    "forge-std/=lib/forge-std/src/",
+]
+
+[rpc_endpoints]
+mezo_testnet = "https://rpc.test.mezo.org"
+
+[etherscan]
+mezo_testnet = { key = "${MEZO_EXPLORER_KEY}", url = "https://api.explorer.test.mezo.org/api" }
