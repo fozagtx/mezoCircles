@@ -1,8 +1,6 @@
 # mezoCircles
 
-On-chain ROSCA savings circles on **Mezo** (Bitcoin L2, EVM-compatible). Friends save BTC together, take turns receiving the pot, and level up with ranks, badges, and XP.
-
-> Inspired by CrediKye — re-architected to use **Mezo BTC as the native gas + savings asset**, so circles are denominated in real BTC, not a wrapped stablecoin.
+On-chain ROSCA savings circles on **Mezo** (Bitcoin L2, EVM-compatible). Friends save BTC together, take turns receiving the pot, and level up with ranks, badges, and XP. Circles are denominated in real BTC (Mezo's native gas + savings asset), not a wrapped stablecoin.
 
 ## Why Mezo
 
