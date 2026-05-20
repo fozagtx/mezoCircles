@@ -44,14 +44,35 @@ forge build
 forge test
 ```
 
-Deploy to Mezo testnet (after filling `.env`):
+Deploy to Mezo testnet:
 
 ```bash
-forge script script/DeployAuraVault.s.sol \
-  --rpc-url $MEZO_TESTNET_RPC_URL \
-  --private-key $DEPLOYER_PRIVATE_KEY \
-  --broadcast
+cp .env.deploy.example .env.deploy        # then fill AURA_VAULT_OWNER + DEPLOYER_PRIVATE_KEY
+bash scripts/deploy-testnet.sh            # dry-run (no broadcast, balance check only)
+bash scripts/deploy-testnet.sh --broadcast
+bash scripts/finalize-deploy.sh 0x<deployed-vault-address>            # verify + patch README
+bash scripts/finalize-deploy.sh 0x<deployed-vault-address> --commit   # also commit broadcast artifact
+
+# Once the vault is deployed, open your Trove (min debt 1,800 MUSD, min ICR 110%):
+bash scripts/open-vault.sh 0x<vault-address> 1 1800   # 1 BTC collateral, 1,800 MUSD debt
 ```
+
+To verify the integration before broadcasting real txs, run the fork test against
+the live Mezo testnet:
+
+```bash
+MEZO_TESTNET_RPC_URL=https://rpc.test.mezo.org \
+  forge test --match-contract AuraVaultForkTest \
+  --fork-url $MEZO_TESTNET_RPC_URL -vv
+```
+
+`.env.deploy` is gitignored. Never commit a private key.
+
+## Deployments
+
+| Network | AuraVault | Owner | Block | Tx |
+|---|---|---|---|---|
+| Mezo testnet (31611) | _(awaiting first deploy)_ | — | — | — |
 
 ## History
 

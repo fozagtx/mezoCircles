@@ -26,9 +26,23 @@ Mezo's MUSD is a Liquity-v2/Threshold-USD fork. Source: `github.com/mezo-org/mus
 
 **Fees (corrected):**
 
-- Interest rate: **1%–5% APR**, chosen at open, **locked for life of loan**. Routes to PCV.
+- Interest rate: **1%–5% APR** range, governed protocol-wide by `InterestRateManager`. Earlier interpretation that rate is "chosen at open" per-trove was WRONG — Mezo's fork is a simplified Liquity v1, not v2 with per-trove rates. There is no `_interestRate` parameter on `openTrove`. Verified by `cast call` against deployed `BorrowerOperations` on 2026-05-20: only 3-arg `openTrove(uint256 _debtAmount, address _upperHint, address _lowerHint)` is recognized.
 - Refinancing fee: configurable issuance %.
 - Redemption fee: **0.75% on BTC received** (waived if redeemer also has an open trove).
+
+**BorrowerOperations actual signatures (verified live):**
+
+```solidity
+function openTrove(uint256 _debtAmount, address _upperHint, address _lowerHint) external payable;
+function addColl(address _upperHint, address _lowerHint) external payable;
+function withdrawColl(uint256 _amount, address _upperHint, address _lowerHint) external;
+function withdrawMUSD(uint256 _amount, address _upperHint, address _lowerHint) external;
+function repayMUSD(uint256 _amount, address _upperHint, address _lowerHint) external;
+function closeTrove() external;
+function adjustTrove(uint256 _collWithdrawal, uint256 _debtChange, bool _isDebtIncrease, address _upperHint, address _lowerHint) external payable;
+```
+
+Note the simplified shape: no `_maxFeePercentage`, no `_interestRate`. Any third-party integration that ports a Liquity-v2 wrapper directly to Mezo will compile but revert at runtime with `"0x"` no-data (selector not found).
 
 **Risk parameters:**
 

@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AURA Vault — Validation Report</title>
+<style>
+  :root {
+    --bg: #0d1117; --panel: #161b22; --border: #30363d;
+    --text: #c9d1d9; --muted: #8b949e; --accent: #f7931a;
+    --go: #3fb950; --warn: #d29922; --bad: #f85149;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 2.5rem 1.5rem; background: var(--bg); color: var(--text);
+         font: 15px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", Helvetica, sans-serif; }
+  .wrap { max-width: 920px; margin: 0 auto; }
+  h1 { font-size: 1.9rem; margin: 0 0 .25rem; letter-spacing: -.02em; }
+  h2 { font-size: 1.15rem; margin: 2rem 0 .75rem; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: .35rem; }
+  h3 { font-size: 1rem; margin: 1.25rem 0 .5rem; color: var(--accent); }
+  .lede { color: var(--muted); margin-top: 0; }
+  .verdict {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: var(--panel); border: 1px solid var(--border); border-left: 3px solid var(--go);
+    padding: .75rem 1rem; margin: 1rem 0 1.5rem; border-radius: 6px; font-weight: 600;
+  }
+  .verdict .tag { background: var(--go); color: #02100a; padding: .15rem .55rem; border-radius: 4px; font-size: .8rem; }
+  .verdict .conf { color: var(--muted); font-weight: 400; margin-left: .25rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .75rem; margin: 1rem 0 1.5rem; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: .85rem 1rem; }
+  .card .k { color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; }
+  .card .v { font-size: 1rem; margin-top: .25rem; font-weight: 600; }
+  ul, ol { padding-left: 1.25rem; }
+  li { margin: .35rem 0; }
+  table { width: 100%; border-collapse: collapse; margin: .5rem 0 1rem; font-size: .92rem; }
+  th, td { text-align: left; padding: .55rem .7rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 500; font-size: .82rem; text-transform: uppercase; letter-spacing: .04em; }
+  .sev-high { color: var(--bad); font-weight: 600; }
+  .sev-medium { color: var(--warn); font-weight: 600; }
+  .sev-low { color: var(--muted); }
+  .sev-unknown { color: var(--muted); font-style: italic; }
+  code, .mono { font-family: "SF Mono", Menlo, Consolas, monospace; font-size: .88em;
+                background: rgba(110,118,129,.15); padding: .1em .35em; border-radius: 3px; }
+  .pill { display: inline-block; padding: .1rem .45rem; border-radius: 3px; font-size: .78rem;
+          background: rgba(110,118,129,.18); color: var(--muted); margin-right: .35rem; }
+  .pill.go { background: rgba(63,185,80,.18); color: var(--go); }
+  .pill.warn { background: rgba(210,153,34,.18); color: var(--warn); }
+  .pill.bad { background: rgba(248,81,73,.18); color: var(--bad); }
+  .meta { color: var(--muted); font-size: .85rem; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .callout { background: rgba(210,153,34,.08); border-left: 3px solid var(--warn); padding: .75rem 1rem; border-radius: 4px; margin: 1rem 0; }
+  .callout strong { color: var(--warn); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>AURA Vault — Validation Report</h1>
+<p class="lede">Per-user Mezo MUSD Trove manager. Validated 2026-05-20.</p>
+
+<div class="verdict">
+  <span class="tag">GO</span>
+  <span>Build, but spend the next two days on user research before the next sprint.</span>
+  <span class="conf">Confidence 0.62</span>
+</div>
+
+<div class="grid">
+  <div class="card"><div class="k">Demand evidence</div><div class="v">Moderate–strong</div></div>
+  <div class="card"><div class="k">Competition</div><div class="v">Sparse (no direct retail equivalent)</div></div>
+  <div class="card"><div class="k">Feasibility</div><div class="v">Straightforward (v0 shipped)</div></div>
+  <div class="card"><div class="k">Time to MVP</div><div class="v">2–3 weeks remaining</div></div>
+  <div class="card"><div class="k">Crypto necessary?</div><div class="v">Yes — unambiguous</div></div>
+  <div class="card"><div class="k">Integration-first?</div><div class="v">Yes — thin wrapper</div></div>
+</div>
+
+<h2>What we're actually building</h2>
+<p>A single <code>AuraVault</code> smart contract per user. It owns one Mezo Trove on the user's behalf and exposes four operations: <code>openVault</code>, <code>addCollateral</code>, <code>repayDebt</code>, <code>closeVault</code>. v2 adds auto-routing of idle MUSD into Mezo's MUSD Savings Vault and a keeper that uses harvested yield to chip away at debt principal — so the BTC collateral "pays for itself."</p>
+<p><strong>Cut from the original pitch</strong> after the capability audit (<a href="../docs/research/mezo-validation.md">docs/research/mezo-validation.md</a>): ERC-4337/passkey UX (no AA on Mezo), Wormhole NTT MUSD bridging (we don't own MUSD), "$50 freelancer rent loan" use case (1,800 MUSD debt floor too high), real-BTC bridge demo on testnet (mainnet only).</p>
+
+<h2>Demand signals</h2>
+<table>
+  <thead><tr><th>Signal</th><th>Strength</th><th>Why it counts</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>TrovePilot (Mezo hackathon winner) addresses adjacent Trove automation</td>
+      <td><span class="pill go">Strong</span></td>
+      <td>Proves judges and ecosystem already validate the category.</td>
+    </tr>
+    <tr>
+      <td>Mezo Alpha Builder Program + Supernormal Foundation funding MUSD utility builders</td>
+      <td><span class="pill go">Strong</span></td>
+      <td>There is actual budget behind the need. Apply.</td>
+    </tr>
+    <tr>
+      <td>Sense &amp; Perseus institutional BTC vaults live; Anchorage + Bullish deployed 250 BTC (April 2026)</td>
+      <td><span class="pill go">Strong</span></td>
+      <td>Large-cap thesis validated. Retail equivalent is unaddressed.</td>
+    </tr>
+    <tr>
+      <td>Mezo 2026 roadmap explicitly invites ecosystem dApps on top of MUSD</td>
+      <td><span class="pill warn">Moderate</span></td>
+      <td>First-party signal, but a roadmap is not user demand.</td>
+    </tr>
+    <tr>
+      <td>Hackathon track "Bank on Bitcoin / MEZO Utilization" exists</td>
+      <td><span class="pill warn">Moderate</span></td>
+      <td>Prize money ≠ product-market fit (per rubric).</td>
+    </tr>
+    <tr>
+      <td><em>No direct evidence</em> of Mezo testnet users complaining about manual Trove management</td>
+      <td><span class="pill bad">Missing</span></td>
+      <td>This is the gap to close in the next two days.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Competitive landscape</h2>
+<table>
+  <thead><tr><th>Existing</th><th>What they do</th><th>How AURA differs</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>TrovePilot</td>
+      <td>Permissionless keeper automation for liquidations/redemptions on the protocol side</td>
+      <td>AURA is borrow-side + yield routing for the <em>borrower</em>, not the protocol</td>
+    </tr>
+    <tr>
+      <td>Sense &amp; Perseus vaults</td>
+      <td>Institutional-grade curated BTC/stable yield vaults (Anchorage custody)</td>
+      <td>AURA targets retail individuals running their own non-custodial vault</td>
+    </tr>
+    <tr>
+      <td>Mezo MUSD Savings Vault (first-party)</td>
+      <td>Deposit MUSD, earn yield</td>
+      <td>AURA wraps the <em>borrow</em> side; the savings vault is a downstream integration target, not a competitor</td>
+    </tr>
+    <tr>
+      <td>Liquity v2 / Threshold-USD wrappers on Ethereum (DeFi Saver, Instadapp, Summer.fi)</td>
+      <td>Mature retail UI for Trove/CDP management</td>
+      <td>None of them are on Mezo. Mezo's user base will need new tooling.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Risks</h2>
+<table>
+  <thead><tr><th>Category</th><th>Risk</th><th>Severity</th></tr></thead>
+  <tbody>
+    <tr><td>Market</td><td>TrovePilot extends into borrow-side automation, collapsing differentiation</td><td class="sev-high">High</td></tr>
+    <tr><td>Market</td><td>Sense/Perseus or Mezo first-party launches a retail Trove manager — audience advantage</td><td class="sev-medium">Medium</td></tr>
+    <tr><td>Technical</td><td>Mezo's BorrowerOperations may diverge from canonical Liquity v2 ABI; needs fork-test against live testnet contracts before mainnet</td><td class="sev-medium">Medium</td></tr>
+    <tr><td>Market</td><td>1,800 MUSD min Trove debt cuts off freelancer-rent-money use case from the original pitch</td><td class="sev-medium">Medium</td></tr>
+    <tr><td>Regulatory</td><td>Opening debt positions on behalf of users may attract scrutiny once a factory + relayer ships. Non-custodial design helps.</td><td class="sev-low">Low</td></tr>
+    <tr><td>Team</td><td>Founder-fit unknown — no validated DeFi shipping history, Mezo audience, or domain credibility</td><td class="sev-unknown">Unknown</td></tr>
+  </tbody>
+</table>
+
+<h2>Crypto necessity check</h2>
+<p><strong>What breaks if you remove the blockchain?</strong> Everything. Troves, MUSD minting, BTC collateral locks, on-chain liquidation — all require Mezo. There is no off-chain version of this. <span class="pill go">Necessary, not ornamental.</span></p>
+
+<h2>Integration-first assessment</h2>
+<p><code>AuraVault.sol</code> is already a thin wrapper over <code>BorrowerOperations</code>. The v2 yield routing layer integrates Mezo's first-party Savings Vault rather than building custom yield strategy logic. The only custom code is the auto-repay keeper logic — which is itself just timed calls to <code>repayMUSD</code>. <span class="pill go">Healthily integration-first.</span> Do not pivot toward writing a custom CDP — Mezo already has one and any custom version would lose the audit time savings.</p>
+
+<h2>Go criteria — 4 of 5 met</h2>
+<ol>
+  <li>Demand score ≥ 2 — <span class="pill go">Yes</span> (moderate-to-strong)</li>
+  <li>Technical feasibility straightforward / hard-but-solvable — <span class="pill go">Yes</span> (v0 already passes 7/7 tests)</li>
+  <li>Time to MVP ≤ 2 weeks — <span class="pill go">Yes</span> (contract done; frontend + keeper outstanding)</li>
+  <li>Unfair advantage — <span class="pill warn">Unknown</span> (need to ask the user)</li>
+  <li>Crypto necessary — <span class="pill go">Yes</span></li>
+</ol>
+
+<h2>Next steps</h2>
+
+<div class="callout">
+<strong>Before any more code:</strong> spend two days finding 5 Mezo testnet users with active Troves. Ask "how are you managing your position today?" Listen for emotion, specificity, and workarounds. Vague interest is not demand. If you can't find 5 talkable users, that's itself a signal — pivot toward a dev-tool / SDK angle instead of a consumer product.
+</div>
+
+<ol>
+  <li>User research: 5 Mezo Trove holders via @MezoNetwork Twitter replies + Mezo Discord. Two days, no code.</li>
+  <li>Apply to <strong>Mezo Alpha Builder Program</strong> and <strong>Supernormal Foundation</strong> — there is real ecosystem money available.</li>
+  <li>Position pitch explicitly <em>against</em> TrovePilot: AURA = borrow + yield automation for individual users; TrovePilot = protocol-side liquidation keepers. Don't let judges conflate them.</li>
+  <li>Integration test on Mezo testnet — open a real Trove via <code>AuraVault</code>. Confirm <code>BorrowerOperations</code> ABI matches our interfaces before week-2 work.</li>
+  <li>Ship frontend BEFORE the keeper. User research needs a tangible thing to react to. Recommend a Next.js PWA reading from Wagmi over the deployed vault.</li>
+  <li>Keep cutting: no AA, no Wormhole NTT, no in-network invoices, no cross-chain settlement until v3 or never.</li>
+</ol>
+
+<h2>Pivot suggestion (only if user research fails)</h2>
+<p>If 2 days of outreach yields no usable conversations, the retail thesis is wrong for now. Pivot: package <code>AuraVault</code> + interfaces + a TypeScript SDK as a <strong>Mezo developer kit</strong> for teams building on top of MUSD. Same code, different ICP. Apply to the Alpha Builder program with that framing.</p>
+
+<div class="meta">
+  Sources:
+  <ul>
+    <li><a href="https://mezo.org/blog/mezo-hackathon-winners">Mezo Hackathon Winners — TrovePilot etc.</a></li>
+    <li><a href="https://mezo.org/blog/mezo-2026-roadmap/">Mezo 2026 Roadmap</a></li>
+    <li><a href="https://mezo.org/blog/btc-and-stablecoin-vaults-have-arrived-on-mezo">Mezo Vaults — Sense &amp; Perseus</a></li>
+    <li><a href="https://www.coindesk.com/business/2026/04/29/mezo-unveils-institutional-bitcoin-yield-vaults-as-demand-grows-to-put-idle-btc-to-work">Mezo institutional vaults — Coindesk April 2026</a></li>
+    <li><a href="https://mezo.org/blog/apply-to-mezos-alpha-builder-program/">Mezo Alpha Builder Program</a></li>
+    <li><a href="https://mezo.org/ecosystem">Mezo Ecosystem Programs &amp; Grants</a></li>
+    <li><a href="https://mezo.org/docs/users/musd/">MUSD Docs Overview</a></li>
+    <li><a href="https://mezo.org/blog/earn-stablecoin-yield-with-the-musd-savings-vault">MUSD Savings Vault</a></li>
+  </ul>
+  Local artifacts: <a href="idea-context.md">.superstack/idea-context.md</a> · <a href="../docs/research/mezo-validation.md">docs/research/mezo-validation.md</a>
+</div>
+
+</div>
+</body>
+</html>

@@ -8,19 +8,14 @@ import {IMUSD} from "./interfaces/IMUSD.sol";
 /// @title AuraVault
 /// @notice Per-user vault that owns a single Mezo MUSD Trove on the user's behalf.
 ///         Wraps BorrowerOperations so the owner gets simple deposit / borrow /
-///         repay / close calls without juggling hints + fee bounds manually.
+///         repay / close calls without juggling hints manually.
 /// @dev    One AuraVault instance == one Mezo Trove. Each user deploys (or has
 ///         a factory deploy) their own vault. The vault address is the Trove
 ///         owner from BorrowerOperations' perspective.
 ///
-///         Validated facts the vault relies on (verified via Mezo docs +
-///         mezo-org/musd repo, see docs/research/mezo-validation.md):
-///         - Collateral is native BTC (msg.value on Mezo L2).
-///         - Interest rate is chosen at open time, range 1%-5% APR, locked
-///           for the life of the loan.
-///         - Minimum debt per trove = 1,800 MUSD. Min ICR = 110%.
-///         - There is no ERC-4337 / AA on Mezo today, so AuraVault is called
-///           by an EOA owner directly.
+///         Mezo's MUSD is a simplified Liquity fork — there is NO per-trove
+///         maxFee or interestRate parameter; rates are governed protocol-wide
+///         by InterestRateManager. See docs/research/mezo-validation.md.
 contract AuraVault {
     address public immutable owner;
     IBorrowerOperations public immutable borrowerOps;
@@ -57,23 +52,15 @@ contract AuraVault {
     // ============================================================
 
     /// @notice Open the Trove. Caller sends BTC as msg.value, vault opens a
-    ///         Trove on Mezo, mints `musdAmount` MUSD, forwards it to owner.
+    ///         Trove on Mezo, mints `debtAmount` MUSD, forwards it to owner.
     function openVault(
-        uint256 maxFeePercentage,
-        uint256 musdAmount,
-        uint256 interestRate,
+        uint256 debtAmount,
         address upperHint,
         address lowerHint
     ) external payable onlyOwner {
         if (msg.value == 0) revert ZeroAmount();
 
-        borrowerOps.openTrove{value: msg.value}(
-            maxFeePercentage,
-            musdAmount,
-            interestRate,
-            upperHint,
-            lowerHint
-        );
+        borrowerOps.openTrove{value: msg.value}(debtAmount, upperHint, lowerHint);
 
         uint256 minted = musd.balanceOf(address(this));
         if (minted > 0) {

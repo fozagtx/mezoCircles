@@ -9,6 +9,7 @@ import {MockTroveManager} from "./MockTroveManager.sol";
 /// @dev    Simulates the state mutations openTrove / addColl / repay /
 ///         closeTrove perform on the real contract: minting MUSD to the
 ///         caller, recording debt + coll on a stand-in TroveManager.
+///         Signatures match the live Mezo MUSD fork (3-arg openTrove etc).
 contract MockBorrowerOperations is IBorrowerOperations {
     MockMUSD public immutable musd;
     MockTroveManager public immutable troveManager;
@@ -19,39 +20,32 @@ contract MockBorrowerOperations is IBorrowerOperations {
     }
 
     function openTrove(
-        uint256 /* _maxFeePercentage */,
-        uint256 _MUSDAmount,
-        uint256 /* _interestRate */,
+        uint256 _debtAmount,
         address /* _upperHint */,
         address /* _lowerHint */
     ) external payable override {
-        troveManager.setTrove(msg.sender, _MUSDAmount, msg.value, 1);
-        musd.mint(msg.sender, _MUSDAmount);
+        troveManager.setTrove(msg.sender, _debtAmount, msg.value, 1);
+        musd.mint(msg.sender, _debtAmount);
     }
 
     function addColl(address, address) external payable override {
         troveManager.addColl(msg.sender, msg.value);
     }
 
-    function withdrawColl(uint256 _collWithdrawal, address, address) external override {
-        troveManager.removeColl(msg.sender, _collWithdrawal);
-        (bool ok, ) = msg.sender.call{value: _collWithdrawal}("");
+    function withdrawColl(uint256 _amount, address, address) external override {
+        troveManager.removeColl(msg.sender, _amount);
+        (bool ok, ) = msg.sender.call{value: _amount}("");
         require(ok, "btc refund failed");
     }
 
-    function withdrawMUSD(
-        uint256,
-        uint256 _MUSDAmount,
-        address,
-        address
-    ) external override {
-        troveManager.addDebt(msg.sender, _MUSDAmount);
-        musd.mint(msg.sender, _MUSDAmount);
+    function withdrawMUSD(uint256 _amount, address, address) external override {
+        troveManager.addDebt(msg.sender, _amount);
+        musd.mint(msg.sender, _amount);
     }
 
-    function repayMUSD(uint256 _MUSDAmount, address, address) external override {
-        musd.burn(msg.sender, _MUSDAmount);
-        troveManager.removeDebt(msg.sender, _MUSDAmount);
+    function repayMUSD(uint256 _amount, address, address) external override {
+        musd.burn(msg.sender, _amount);
+        troveManager.removeDebt(msg.sender, _amount);
     }
 
     function closeTrove() external override {
@@ -67,9 +61,8 @@ contract MockBorrowerOperations is IBorrowerOperations {
     }
 
     function adjustTrove(
-        uint256,
         uint256 _collWithdrawal,
-        uint256 _MUSDChange,
+        uint256 _debtChange,
         bool _isDebtIncrease,
         address,
         address
@@ -80,13 +73,13 @@ contract MockBorrowerOperations is IBorrowerOperations {
             (bool ok, ) = msg.sender.call{value: _collWithdrawal}("");
             require(ok, "btc refund failed");
         }
-        if (_MUSDChange > 0) {
+        if (_debtChange > 0) {
             if (_isDebtIncrease) {
-                troveManager.addDebt(msg.sender, _MUSDChange);
-                musd.mint(msg.sender, _MUSDChange);
+                troveManager.addDebt(msg.sender, _debtChange);
+                musd.mint(msg.sender, _debtChange);
             } else {
-                musd.burn(msg.sender, _MUSDChange);
-                troveManager.removeDebt(msg.sender, _MUSDChange);
+                musd.burn(msg.sender, _debtChange);
+                troveManager.removeDebt(msg.sender, _debtChange);
             }
         }
     }

@@ -17,7 +17,6 @@ contract AuraVaultTest is Test {
 
     uint256 internal constant BTC_DEPOSIT = 1 ether;
     uint256 internal constant MUSD_BORROW = 2_000e18;
-    uint256 internal constant INTEREST_RATE = 1e16; // 1%
 
     function setUp() public {
         musd = new MockMUSD();
@@ -30,13 +29,7 @@ contract AuraVaultTest is Test {
 
     function test_openVault_mintsAndForwardsMUSD() public {
         vm.prank(user);
-        vault.openVault{value: BTC_DEPOSIT}(
-            5e16, // maxFee 5%
-            MUSD_BORROW,
-            INTEREST_RATE,
-            address(0),
-            address(0)
-        );
+        vault.openVault{value: BTC_DEPOSIT}(MUSD_BORROW, address(0), address(0));
 
         assertEq(musd.balanceOf(user), MUSD_BORROW, "user did not receive minted MUSD");
         assertEq(vault.vaultDebt(), MUSD_BORROW, "vault debt mismatch");
@@ -49,13 +42,13 @@ contract AuraVaultTest is Test {
         vm.deal(stranger, BTC_DEPOSIT);
         vm.prank(stranger);
         vm.expectRevert(AuraVault.NotOwner.selector);
-        vault.openVault{value: BTC_DEPOSIT}(5e16, MUSD_BORROW, INTEREST_RATE, address(0), address(0));
+        vault.openVault{value: BTC_DEPOSIT}(MUSD_BORROW, address(0), address(0));
     }
 
     function test_openVault_revertsOnZeroBTC() public {
         vm.prank(user);
         vm.expectRevert(AuraVault.ZeroAmount.selector);
-        vault.openVault(5e16, MUSD_BORROW, INTEREST_RATE, address(0), address(0));
+        vault.openVault(MUSD_BORROW, address(0), address(0));
     }
 
     function test_addCollateral_increasesBalance() public {
@@ -101,12 +94,6 @@ contract AuraVaultTest is Test {
 
     function _openDefaultVault() internal {
         vm.prank(user);
-        vault.openVault{value: BTC_DEPOSIT}(
-            5e16,
-            MUSD_BORROW,
-            INTEREST_RATE,
-            address(0),
-            address(0)
-        );
+        vault.openVault{value: BTC_DEPOSIT}(MUSD_BORROW, address(0), address(0));
     }
 }
