@@ -1,63 +1,79 @@
 # mezoCircles
 
-On-chain ROSCA savings circles on **Mezo** (Bitcoin L2, EVM-compatible). Friends save BTC together, take turns receiving the pot, and level up with ranks, badges, and XP. Circles are denominated in real BTC (Mezo's native gas + savings asset), not a wrapped stablecoin.
+One-click Mezo Trove manager. Deposit BTC, mint MUSD, hold yield-bearing savings — without juggling hints, fee bounds, or trove bookkeeping.
 
-## Why Mezo
+## What this is
 
-- **Gas token is BTC** — deposits and gas use the same asset; no token-swap friction.
-- **Bitcoin-secured EVM** — full Solidity / Foundry / wagmi stack.
-- **Instant finality (no reorgs)** — payout rotation is deterministic the moment a block lands.
-- **Native bridge** (`0xF6680EA3b480cA2b72D96ea13cCAF2cFd8e6908c`) lets users move BTC ↔ Mezo BTC ↔ Ethereum tBTC without wrapped-token games.
+`MezoCirclesVault` is a per-user smart contract that owns a single Mezo MUSD Trove on behalf of its owner. The owner gets four operations — `openVault`, `addCollateral`, `repayDebt`, `closeVault` — instead of the raw Liquity-v2-fork surface. Future work bolts on auto-yield routing (MUSD → MUSD Savings Vault) and a keeper that auto-repays debt from yield.
 
-## Architecture
+The hackathon scope is intentionally narrow. See `docs/research/mezo-validation.md` for the validated facts about Mezo that informed which features are in v1 vs deferred.
+
+## Scope (week 1)
+
+- [x] `MezoCirclesVault.sol` — per-user vault wrapping Mezo `BorrowerOperations`
+- [x] Mock-based unit tests (7/7 passing)
+- [x] Deploy script targeting Mezo testnet
+- [x] Mezo capability audit (`docs/research/mezo-validation.md`)
+- [ ] Mezo testnet deploy + manual e2e test
+- [ ] Frontend (deferred to week 5)
+- [ ] Auto-yield keeper (deferred to week 3)
+- [ ] Account abstraction / passkeys (cut from v1 — no Mezo support)
+
+## Known constraints (validated against Mezo deployment)
+
+- **Min debt per Trove: 1,800 MUSD.** Cannot serve sub-$2k positions.
+- **Interest rate: 1–5% APR**, locked at open. Not "1% flat" as some marketing implies.
+- **Redemption fee: 0.75%** on BTC received.
+- **No ERC-4337 on Mezo today.** mezoCircles uses EOA wallets (MetaMask/UniSat/Xverse + Mezo Passport connector). BTC pays gas natively.
+- **Testnet BTC is faucet-issued**, not bridged real BTC via Threshold. Mainnet uses the canonical tBTC bridge.
+
+## Repository layout
 
 ```
-mezoCircles/
-├── contracts/   Foundry — SavingsCircle (clone), Factory (EIP-1167),
-│                ReputationSystem, AchievementBadge (soulbound), UserProfile
-├── web/         Next.js 14 + wagmi v2 + viem + Tailwind + Framer Motion
-│                Telegram WebApp SDK integration
-└── bot/         Grammy Telegram bot — invites, deposit reminders, payout pings
+contracts/         Foundry project — MezoCirclesVault.sol + interfaces + tests
+docs/research/     Validation notes informing scope decisions
+.env.example       Mezo RPC + MUSD/BorrowerOperations/TroveManager addresses
 ```
-
-## Network
-
-| | Mezo Testnet (matsnet) |
-|---|---|
-| Chain ID | `31611` |
-| RPC | `https://rpc.test.mezo.org` |
-| Gas token | BTC |
-| Explorer | https://explorer.test.mezo.org |
 
 ## Quickstart
 
 ```bash
-# 1. Contracts
 cd contracts
-forge install
+forge install foundry-rs/forge-std --no-commit   # first time only
 forge build
 forge test
-PRIVATE_KEY=0x... forge script script/Deploy.s.sol --rpc-url $MEZO_RPC --broadcast
-
-# 2. Web
-cd ../web
-pnpm install
-cp .env.example .env.local   # paste deployed addresses
-pnpm dev
-
-# 3. Telegram bot
-cd ../bot
-pnpm install
-cp .env.example .env         # set BOT_TOKEN + WEBAPP_URL
-pnpm dev
 ```
 
-## Features
+Deploy to Mezo testnet:
 
-- 🎯 Create circles with 3–10 members, fixed contribution, fixed cycle length
-- 🔁 Smart-contract-enforced payout rotation (random or join-order)
-- ⭐ XP + 5-tier rank system (Bronze → Diamond) tied to deposit history
-- 🏆 Soulbound achievement badges (first deposit, 30-day streak, full circle complete)
-- 🎁 Referral system: inviter + invitee both earn +50 reputation
-- 📱 Telegram Mini App with native share for circle invites
-- 🌐 Also runs as a standalone web app
+```bash
+cp .env.deploy.example .env.deploy        # then fill MEZOCIRCLES_VAULT_OWNER + DEPLOYER_PRIVATE_KEY
+bash scripts/deploy-testnet.sh            # dry-run (no broadcast, balance check only)
+bash scripts/deploy-testnet.sh --broadcast
+bash scripts/finalize-deploy.sh 0x<deployed-vault-address>            # verify + patch README
+bash scripts/finalize-deploy.sh 0x<deployed-vault-address> --commit   # also commit broadcast artifact
+
+# Once the vault is deployed, open your Trove (min debt 1,800 MUSD, min ICR 110%):
+bash scripts/open-vault.sh 0x<vault-address> 1 1800   # 1 BTC collateral, 1,800 MUSD debt
+```
+
+To verify the integration before broadcasting real txs, run the fork test against
+the live Mezo testnet:
+
+```bash
+MEZO_TESTNET_RPC_URL=https://rpc.test.mezo.org \
+  forge test --match-contract MezoCirclesVaultForkTest \
+  --fork-url $MEZO_TESTNET_RPC_URL -vv
+```
+
+`.env.deploy` is gitignored. Never commit a private key.
+
+## Deployments
+
+| Network | MezoCirclesVault | Owner | Block | Tx |
+|---|---|---|---|---|
+| Mezo testnet (31611) | _(awaiting first deploy)_ | — | — | — |
+
+## History
+
+The project was originally an on-chain ROSCA (savings circles) on Mezo. Refocused to a per-user Mezo MUSD Trove autopilot on 2026-05-20. The pre-refocus ROSCA codebase is preserved at the git tag `archive/mezo-circles-2026-05-20`.

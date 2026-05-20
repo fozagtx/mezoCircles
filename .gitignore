@@ -5,7 +5,11 @@ dist/
 build/
 .env
 .env.local
+.env.deploy
 .env.*.local
+.env.*
+!.env.example
+!.env.deploy.example
 *.log
 .DS_Store
 
