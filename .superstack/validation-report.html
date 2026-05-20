@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AURA Vault — Validation Report</title>
+<title>mezoCircles — Validation Report</title>
 <style>
   :root {
     --bg: #0d1117; --panel: #161b22; --border: #30363d;
@@ -55,7 +55,7 @@
 <body>
 <div class="wrap">
 
-<h1>AURA Vault — Validation Report</h1>
+<h1>mezoCircles — Validation Report</h1>
 <p class="lede">Per-user Mezo MUSD Trove manager. Validated 2026-05-20.</p>
 
 <div class="verdict">
@@ -74,7 +74,7 @@
 </div>
 
 <h2>What we're actually building</h2>
-<p>A single <code>AuraVault</code> smart contract per user. It owns one Mezo Trove on the user's behalf and exposes four operations: <code>openVault</code>, <code>addCollateral</code>, <code>repayDebt</code>, <code>closeVault</code>. v2 adds auto-routing of idle MUSD into Mezo's MUSD Savings Vault and a keeper that uses harvested yield to chip away at debt principal — so the BTC collateral "pays for itself."</p>
+<p>A single <code>MezoCirclesVault</code> smart contract per user. It owns one Mezo Trove on the user's behalf and exposes four operations: <code>openVault</code>, <code>addCollateral</code>, <code>repayDebt</code>, <code>closeVault</code>. v2 adds auto-routing of idle MUSD into Mezo's MUSD Savings Vault and a keeper that uses harvested yield to chip away at debt principal — so the BTC collateral "pays for itself."</p>
 <p><strong>Cut from the original pitch</strong> after the capability audit (<a href="../docs/research/mezo-validation.md">docs/research/mezo-validation.md</a>): ERC-4337/passkey UX (no AA on Mezo), Wormhole NTT MUSD bridging (we don't own MUSD), "$50 freelancer rent loan" use case (1,800 MUSD debt floor too high), real-BTC bridge demo on testnet (mainnet only).</p>
 
 <h2>Demand signals</h2>
@@ -116,22 +116,22 @@
 
 <h2>Competitive landscape</h2>
 <table>
-  <thead><tr><th>Existing</th><th>What they do</th><th>How AURA differs</th></tr></thead>
+  <thead><tr><th>Existing</th><th>What they do</th><th>How mezoCircles differs</th></tr></thead>
   <tbody>
     <tr>
       <td>TrovePilot</td>
       <td>Permissionless keeper automation for liquidations/redemptions on the protocol side</td>
-      <td>AURA is borrow-side + yield routing for the <em>borrower</em>, not the protocol</td>
+      <td>mezoCircles is borrow-side + yield routing for the <em>borrower</em>, not the protocol</td>
     </tr>
     <tr>
       <td>Sense &amp; Perseus vaults</td>
       <td>Institutional-grade curated BTC/stable yield vaults (Anchorage custody)</td>
-      <td>AURA targets retail individuals running their own non-custodial vault</td>
+      <td>mezoCircles targets retail individuals running their own non-custodial vault</td>
     </tr>
     <tr>
       <td>Mezo MUSD Savings Vault (first-party)</td>
       <td>Deposit MUSD, earn yield</td>
-      <td>AURA wraps the <em>borrow</em> side; the savings vault is a downstream integration target, not a competitor</td>
+      <td>mezoCircles wraps the <em>borrow</em> side; the savings vault is a downstream integration target, not a competitor</td>
     </tr>
     <tr>
       <td>Liquity v2 / Threshold-USD wrappers on Ethereum (DeFi Saver, Instadapp, Summer.fi)</td>
@@ -158,7 +158,7 @@
 <p><strong>What breaks if you remove the blockchain?</strong> Everything. Troves, MUSD minting, BTC collateral locks, on-chain liquidation — all require Mezo. There is no off-chain version of this. <span class="pill go">Necessary, not ornamental.</span></p>
 
 <h2>Integration-first assessment</h2>
-<p><code>AuraVault.sol</code> is already a thin wrapper over <code>BorrowerOperations</code>. The v2 yield routing layer integrates Mezo's first-party Savings Vault rather than building custom yield strategy logic. The only custom code is the auto-repay keeper logic — which is itself just timed calls to <code>repayMUSD</code>. <span class="pill go">Healthily integration-first.</span> Do not pivot toward writing a custom CDP — Mezo already has one and any custom version would lose the audit time savings.</p>
+<p><code>MezoCirclesVault.sol</code> is already a thin wrapper over <code>BorrowerOperations</code>. The v2 yield routing layer integrates Mezo's first-party Savings Vault rather than building custom yield strategy logic. The only custom code is the auto-repay keeper logic — which is itself just timed calls to <code>repayMUSD</code>. <span class="pill go">Healthily integration-first.</span> Do not pivot toward writing a custom CDP — Mezo already has one and any custom version would lose the audit time savings.</p>
 
 <h2>Go criteria — 4 of 5 met</h2>
 <ol>
@@ -178,14 +178,14 @@
 <ol>
   <li>User research: 5 Mezo Trove holders via @MezoNetwork Twitter replies + Mezo Discord. Two days, no code.</li>
   <li>Apply to <strong>Mezo Alpha Builder Program</strong> and <strong>Supernormal Foundation</strong> — there is real ecosystem money available.</li>
-  <li>Position pitch explicitly <em>against</em> TrovePilot: AURA = borrow + yield automation for individual users; TrovePilot = protocol-side liquidation keepers. Don't let judges conflate them.</li>
-  <li>Integration test on Mezo testnet — open a real Trove via <code>AuraVault</code>. Confirm <code>BorrowerOperations</code> ABI matches our interfaces before week-2 work.</li>
+  <li>Position pitch explicitly <em>against</em> TrovePilot: mezoCircles = borrow + yield automation for individual users; TrovePilot = protocol-side liquidation keepers. Don't let judges conflate them.</li>
+  <li>Integration test on Mezo testnet — open a real Trove via <code>MezoCirclesVault</code>. Confirm <code>BorrowerOperations</code> ABI matches our interfaces before week-2 work.</li>
   <li>Ship frontend BEFORE the keeper. User research needs a tangible thing to react to. Recommend a Next.js PWA reading from Wagmi over the deployed vault.</li>
   <li>Keep cutting: no AA, no Wormhole NTT, no in-network invoices, no cross-chain settlement until v3 or never.</li>
 </ol>
 
 <h2>Pivot suggestion (only if user research fails)</h2>
-<p>If 2 days of outreach yields no usable conversations, the retail thesis is wrong for now. Pivot: package <code>AuraVault</code> + interfaces + a TypeScript SDK as a <strong>Mezo developer kit</strong> for teams building on top of MUSD. Same code, different ICP. Apply to the Alpha Builder program with that framing.</p>
+<p>If 2 days of outreach yields no usable conversations, the retail thesis is wrong for now. Pivot: package <code>MezoCirclesVault</code> + interfaces + a TypeScript SDK as a <strong>Mezo developer kit</strong> for teams building on top of MUSD. Same code, different ICP. Apply to the Alpha Builder program with that framing.</p>
 
 <div class="meta">
   Sources:

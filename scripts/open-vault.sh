@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Open the Trove on a deployed AuraVault. Run AFTER the vault is deployed.
+# Open the Trove on a deployed MezoCirclesVault. Run AFTER the vault is deployed.
 # Usage:
 #   bash scripts/open-vault.sh 0x<vault-address> <btc-collateral> <musd-debt>
 #
@@ -58,7 +58,8 @@ fi
 # Confirm vault owner matches our caller, otherwise the call will revert with NotOwner.
 DEPLOYER_ADDR="$(cast wallet address --private-key "$DEPLOYER_PRIVATE_KEY")"
 VAULT_OWNER="$(cast call "$VAULT" "owner()(address)" --rpc-url "$RPC_URL")"
-if [ "${DEPLOYER_ADDR,,}" != "${VAULT_OWNER,,}" ]; then
+lc() { printf '%s' "$1" | tr '[:upper:]' '[:lower:]'; }
+if [ "$(lc "$DEPLOYER_ADDR")" != "$(lc "$VAULT_OWNER")" ]; then
   echo "❌ Vault owner is $VAULT_OWNER but DEPLOYER_PRIVATE_KEY belongs to $DEPLOYER_ADDR" >&2
   exit 1
 fi

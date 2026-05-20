@@ -1,6 +1,6 @@
 # Mezo Capabilities Validation — 2026-05-20
 
-Pre-build audit before scoping AURA. Source documents listed at bottom.
+Pre-build audit before scoping mezoCircles. Source documents listed at bottom.
 
 ## Summary
 
@@ -74,14 +74,14 @@ Implication: any "gasless / passkey / biometric" UX requires self-deploying:
 2. A bundler (fork of Alto)
 3. A custom paymaster
 
-= 4–8 weeks of infrastructure work. Deferred past v1. AURA v1 uses standard EOA + MetaMask/UniSat/Xverse with BTC paying gas.
+= 4–8 weeks of infrastructure work. Deferred past v1. mezoCircles v1 uses standard EOA + MetaMask/UniSat/Xverse with BTC paying gas.
 
 ## 3. tBTC bridge
 
 - **Mainnet:** Real tBTC bridge live. Bridged tBTC at `0x7b7C000000000000000000000000000000000000`. ~3–4 hr settlement, 0.01 BTC minimum. MUSD accepts only BTC/tBTC as collateral. Confirmed by Chainwire announcement, May 2025.
 - **Testnet (matsnet):** Bridging is via the matsnet portal, which mints synthetic "matsnet BTC" from the faucet. Not real Bitcoin-testnet bridged via Threshold.
 
-For AURA: demo flows on testnet use faucet BTC. Mainnet docs/demo should show the canonical Threshold bridge path.
+For mezoCircles: demo flows on testnet use faucet BTC. Mainnet docs/demo should show the canonical Threshold bridge path.
 
 ## 4. veMEZO / gauges
 

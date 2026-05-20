@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Sanity-check a deployed AuraVault on Mezo testnet.
+# Sanity-check a deployed MezoCirclesVault on Mezo testnet.
 # Usage: bash scripts/verify-deploy.sh 0x<deployed-vault-address>
 set -euo pipefail
 
@@ -21,7 +21,7 @@ source .env.deploy
 
 RPC_URL="${MEZO_TESTNET_RPC_URL:-https://rpc.test.mezo.org}"
 
-echo "▶ Verifying AuraVault at $VAULT on $RPC_URL"
+echo "▶ Verifying MezoCirclesVault at $VAULT on $RPC_URL"
 echo ""
 
 OWNER_ONCHAIN="$(cast call "$VAULT" "owner()(address)" --rpc-url "$RPC_URL")"
@@ -54,7 +54,7 @@ check() {
     fail=$((fail+1))
   fi
 }
-check "owner"          "$AURA_VAULT_OWNER"     "$OWNER_ONCHAIN"
+check "owner"          "$MEZOCIRCLES_VAULT_OWNER" "$OWNER_ONCHAIN"
 check "borrowerOps"    "$MEZO_BORROWER_OPS"    "$BORROWER_OPS_ONCHAIN"
 check "troveManager"   "$MEZO_TROVE_MANAGER"   "$TROVE_MANAGER_ONCHAIN"
 check "musd"           "$MEZO_MUSD"            "$MUSD_ONCHAIN"

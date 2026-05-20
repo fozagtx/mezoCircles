@@ -1,4 +1,4 @@
-# Idea Context — AURA Vault
+# Idea Context — mezoCircles
 
 ## Idea
 
@@ -19,9 +19,9 @@ Target user: retail Bitcoin holders on Mezo who want stable liquidity (MUSD) wit
       "Hackathon track 'Bank on Bitcoin / MEZO Utilization' explicitly invites this category"
     ],
     "risks": [
-      { "category": "market", "description": "TrovePilot could extend from liquidation keepers into borrow-side automation, collapsing AURA's differentiation", "severity": "high" },
+      { "category": "market", "description": "TrovePilot could extend from liquidation keepers into borrow-side automation, collapsing mezoCircles's differentiation", "severity": "high" },
       { "category": "market", "description": "Sense/Perseus or Mezo first-party could launch a retail-grade Trove manager — they have audience advantage", "severity": "medium" },
-      { "category": "technical", "description": "AuraVault's interfaces are skeletal — Mezo's BorrowerOperations may diverge from canonical Liquity v2 ABI; needs forking-test against live contracts before mainnet", "severity": "medium" },
+      { "category": "technical", "description": "MezoCirclesVault's interfaces are skeletal — Mezo's BorrowerOperations may diverge from canonical Liquity v2 ABI; needs forking-test against live contracts before mainnet", "severity": "medium" },
       { "category": "market", "description": "1800 MUSD min Trove debt cuts off the freelancer-rent-money use case the original pitch leaned on", "severity": "medium" },
       { "category": "regulatory", "description": "Acting as an intermediary that opens debt positions on behalf of users may attract regulatory attention. Mitigated by non-custodial design but blurs once a factory + relayer ships", "severity": "low" },
       { "category": "team", "description": "Founder-fit unknown — no validation that the user has prior DeFi shipping experience, Mezo audience, or domain credibility", "severity": "unknown" }
@@ -29,12 +29,12 @@ Target user: retail Bitcoin holders on Mezo who want stable liquidity (MUSD) wit
     "go_no_go": "go",
     "confidence": 0.62,
     "next_steps": [
-      "Talk to 5 Mezo testnet users (Discord, Twitter @MezoNetwork replies) before building frontend — ask 'how are you managing your Trove today?' not 'would you use AURA?'",
+      "Talk to 5 Mezo testnet users (Discord, Twitter @MezoNetwork replies) before building frontend — ask 'how are you managing your Trove today?' not 'would you use mezoCircles?'",
       "Apply to Mezo Alpha Builder Program / Supernormal Foundation — there is real money behind this and you should take it",
-      "Position explicitly AGAINST TrovePilot in pitch: AURA = borrow + yield automation for individual users; TrovePilot = liquidation keepers for the protocol",
-      "Run integration test that opens a real Trove via AuraVault on Mezo testnet — confirm BorrowerOperations ABI matches our interfaces before week-2 work",
+      "Position explicitly AGAINST TrovePilot in pitch: mezoCircles = borrow + yield automation for individual users; TrovePilot = liquidation keepers for the protocol",
+      "Run integration test that opens a real Trove via MezoCirclesVault on Mezo testnet — confirm BorrowerOperations ABI matches our interfaces before week-2 work",
       "Decide whether to ship v2 features (yield routing + auto-repay) before or after frontend; recommend frontend FIRST so user research has something tangible to react to",
-      "Integration-first check: AuraVault is already a thin wrapper over BorrowerOperations + (planned) sMUSD savings vault — this is the right architecture. Do NOT build custom CDP logic; keep wrapping",
+      "Integration-first check: MezoCirclesVault is already a thin wrapper over BorrowerOperations + (planned) sMUSD savings vault — this is the right architecture. Do NOT build custom CDP logic; keep wrapping",
       "Cut from v1: ERC-4337 / passkey UX, Wormhole NTT, in-network invoices, cross-chain settlement (per docs/research/mezo-validation.md)"
     ],
     "crypto_necessary": true,

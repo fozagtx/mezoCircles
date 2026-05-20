@@ -1,16 +1,16 @@
-# AURA Vault
+# mezoCircles
 
 One-click Mezo Trove manager. Deposit BTC, mint MUSD, hold yield-bearing savings — without juggling hints, fee bounds, or trove bookkeeping.
 
 ## What this is
 
-`AuraVault` is a per-user smart contract that owns a single Mezo MUSD Trove on behalf of its owner. The owner gets four operations — `openVault`, `addCollateral`, `repayDebt`, `closeVault` — instead of the raw Liquity-v2-fork surface. Future work bolts on auto-yield routing (MUSD → MUSD Savings Vault) and a keeper that auto-repays debt from yield.
+`MezoCirclesVault` is a per-user smart contract that owns a single Mezo MUSD Trove on behalf of its owner. The owner gets four operations — `openVault`, `addCollateral`, `repayDebt`, `closeVault` — instead of the raw Liquity-v2-fork surface. Future work bolts on auto-yield routing (MUSD → MUSD Savings Vault) and a keeper that auto-repays debt from yield.
 
 The hackathon scope is intentionally narrow. See `docs/research/mezo-validation.md` for the validated facts about Mezo that informed which features are in v1 vs deferred.
 
 ## Scope (week 1)
 
-- [x] `AuraVault.sol` — per-user vault wrapping Mezo `BorrowerOperations`
+- [x] `MezoCirclesVault.sol` — per-user vault wrapping Mezo `BorrowerOperations`
 - [x] Mock-based unit tests (7/7 passing)
 - [x] Deploy script targeting Mezo testnet
 - [x] Mezo capability audit (`docs/research/mezo-validation.md`)
@@ -24,13 +24,13 @@ The hackathon scope is intentionally narrow. See `docs/research/mezo-validation.
 - **Min debt per Trove: 1,800 MUSD.** Cannot serve sub-$2k positions.
 - **Interest rate: 1–5% APR**, locked at open. Not "1% flat" as some marketing implies.
 - **Redemption fee: 0.75%** on BTC received.
-- **No ERC-4337 on Mezo today.** AURA uses EOA wallets (MetaMask/UniSat/Xverse + Mezo Passport connector). BTC pays gas natively.
+- **No ERC-4337 on Mezo today.** mezoCircles uses EOA wallets (MetaMask/UniSat/Xverse + Mezo Passport connector). BTC pays gas natively.
 - **Testnet BTC is faucet-issued**, not bridged real BTC via Threshold. Mainnet uses the canonical tBTC bridge.
 
 ## Repository layout
 
 ```
-contracts/         Foundry project — AuraVault.sol + interfaces + tests
+contracts/         Foundry project — MezoCirclesVault.sol + interfaces + tests
 docs/research/     Validation notes informing scope decisions
 .env.example       Mezo RPC + MUSD/BorrowerOperations/TroveManager addresses
 ```
@@ -47,7 +47,7 @@ forge test
 Deploy to Mezo testnet:
 
 ```bash
-cp .env.deploy.example .env.deploy        # then fill AURA_VAULT_OWNER + DEPLOYER_PRIVATE_KEY
+cp .env.deploy.example .env.deploy        # then fill MEZOCIRCLES_VAULT_OWNER + DEPLOYER_PRIVATE_KEY
 bash scripts/deploy-testnet.sh            # dry-run (no broadcast, balance check only)
 bash scripts/deploy-testnet.sh --broadcast
 bash scripts/finalize-deploy.sh 0x<deployed-vault-address>            # verify + patch README
@@ -62,7 +62,7 @@ the live Mezo testnet:
 
 ```bash
 MEZO_TESTNET_RPC_URL=https://rpc.test.mezo.org \
-  forge test --match-contract AuraVaultForkTest \
+  forge test --match-contract MezoCirclesVaultForkTest \
   --fork-url $MEZO_TESTNET_RPC_URL -vv
 ```
 
@@ -70,10 +70,10 @@ MEZO_TESTNET_RPC_URL=https://rpc.test.mezo.org \
 
 ## Deployments
 
-| Network | AuraVault | Owner | Block | Tx |
+| Network | MezoCirclesVault | Owner | Block | Tx |
 |---|---|---|---|---|
 | Mezo testnet (31611) | _(awaiting first deploy)_ | — | — | — |
 
 ## History
 
-Pivoted from `mezoCircles` (on-chain ROSCA) on 2026-05-20. The full prior history is preserved at `archive/mezo-circles-2026-05-20`.
+The project was originally an on-chain ROSCA (savings circles) on Mezo. Refocused to a per-user Mezo MUSD Trove autopilot on 2026-05-20. The pre-refocus ROSCA codebase is preserved at the git tag `archive/mezo-circles-2026-05-20`.

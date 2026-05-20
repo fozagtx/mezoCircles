@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Mezo Hackathon — Competitive Landscape for AURA</title>
+<title>Mezo Hackathon — Competitive Landscape for mezoCircles</title>
 <style>
   :root {
     --bg: #0d1117; --panel: #161b22; --border: #30363d;
@@ -51,17 +51,17 @@
 <body>
 <div class="wrap">
 
-<h1>Mezo Hackathon Winners — Competitive Landscape for AURA</h1>
+<h1>Mezo Hackathon Winners — Competitive Landscape for mezoCircles</h1>
 <p class="lede">Synthesized from the official winners blog + YouTube demo-day transcript (pfJqVrGW_N0) + per-project repo deep-dives. 2026-05-20.</p>
 
 <h2>TL;DR — three things that matter</h2>
 
 <div class="callout">
-<strong>1. AURA's "real Trove autopilot" is uncontested.</strong> StratumFi shipped the self-repaying-loan narrative but sidesteps Mezo's actual CDP — they use a synthetic <code>bMUSD</code> + protocol-owned Tigris LP, not <code>BorrowerOperations.openTrove</code>. Invoiced uses a literal mock MUSD with a hardcoded $50,000 BTC price. TrovePilot explicitly disclaims borrower automation. <strong>No winner does real-Trove + real-MUSD + auto-repay-from-yield as a closed loop.</strong>
+<strong>1. mezoCircles's "real Trove autopilot" is uncontested.</strong> StratumFi shipped the self-repaying-loan narrative but sidesteps Mezo's actual CDP — they use a synthetic <code>bMUSD</code> + protocol-owned Tigris LP, not <code>BorrowerOperations.openTrove</code>. Invoiced uses a literal mock MUSD with a hardcoded $50,000 BTC price. TrovePilot explicitly disclaims borrower automation. <strong>No winner does real-Trove + real-MUSD + auto-repay-from-yield as a closed loop.</strong>
 </div>
 
 <div class="callout">
-<strong>2. The "ROSCA / tanda" framing the original mezoCircles pitch used is alive and winning.</strong> KhipuVault won 1st (Financial Access) on cooperative savings. MezoLotto won Community Choice (Daily Bitcoin) on PoolTogether-style no-loss lottery. Both invoked tanda/ROSCA vocabulary on stage. The angle wasn't dead — it was just unshipped.
+<strong>2. The "ROSCA / tanda" framing this project's pre-refocus pitch used is alive and winning.</strong> KhipuVault won 1st (Financial Access) on cooperative savings. MezoLotto won Community Choice (Daily Bitcoin) on PoolTogether-style no-loss lottery. Both invoked tanda/ROSCA vocabulary on stage. The angle wasn't dead — it was just unshipped.
 </div>
 
 <div class="callout">
@@ -71,7 +71,7 @@
 <h2>Per-project competitive verdicts</h2>
 
 <table>
-<thead><tr><th>Project</th><th>Track / Place</th><th>Overlap with AURA</th><th>Why</th></tr></thead>
+<thead><tr><th>Project</th><th>Track / Place</th><th>Overlap with mezoCircles</th><th>Why</th></tr></thead>
 <tbody>
 <tr>
   <td><strong>StratumFi</strong></td>
@@ -83,25 +83,25 @@
   <td><strong>TrovePilot</strong></td>
   <td>Advanced DeFi — 1st</td>
   <td><span class="pill different">DIFFERENT PROBLEM</span></td>
-  <td>Protocol-side keepers (liquidate/redeem), not borrower-side. Explicit roadmap exclusion of AURA's territory</td>
+  <td>Protocol-side keepers (liquidate/redeem), not borrower-side. Explicit roadmap exclusion of mezoCircles's territory</td>
 </tr>
 <tr>
   <td><strong>BTCShield</strong></td>
   <td>Advanced DeFi — 2nd</td>
   <td><span class="pill adjacent">ADJACENT REFERRAL</span></td>
-  <td>Forked the entire MUSD protocol to whitelist a privileged contract — privilege AURA can't get as a wrapper</td>
+  <td>Forked the entire MUSD protocol to whitelist a privileged contract — privilege mezoCircles can't get as a wrapper</td>
 </tr>
 <tr>
   <td><strong>Invoiced</strong></td>
   <td>Daily Bitcoin — 1st</td>
   <td><span class="pill partial">PARTIAL</span></td>
-  <td>Owns the invoicing UI; the "vault → MUSD" half is a hand-rolled mock. AURA can be the rails behind Invoiced</td>
+  <td>Owns the invoicing UI; the "vault → MUSD" half is a hand-rolled mock. mezoCircles can be the rails behind Invoiced</td>
 </tr>
 <tr>
   <td><strong>KhipuVault</strong></td>
   <td>Financial Access — 1st</td>
   <td><span class="pill neutral">DIFFERENT ICP</span></td>
-  <td>LatAm cooperative ROSCA savings. Different user segment, but won on community-savings angle that AURA <em>could</em> borrow for a v2 feature</td>
+  <td>LatAm cooperative ROSCA savings. Different user segment, but won on community-savings angle that mezoCircles <em>could</em> borrow for a v2 feature</td>
 </tr>
 <tr>
   <td><strong>BitSpend</strong></td>
@@ -125,22 +125,22 @@
   <td><strong>MezoLotto</strong></td>
   <td>Daily Bitcoin — Community Choice</td>
   <td><span class="pill adjacent">FEATURE TO BORROW</span></td>
-  <td>No-loss yield lottery mechanic. Could be a v2 AURA feature: opt-in lottery on idle savings-vault yield</td>
+  <td>No-loss yield lottery mechanic. Could be a v2 mezoCircles feature: opt-in lottery on idle savings-vault yield</td>
 </tr>
 </tbody>
 </table>
 
-<h2>Deep dive: the four projects that matter to AURA</h2>
+<h2>Deep dive: the four projects that matter to mezoCircles</h2>
 
 <div class="project">
   <div class="head"><h3>StratumFi — closest narrative competitor, weakest execution</h3>
     <span class="pill partial">OVERLAPS PARTIALLY</span></div>
   <p class="lead">Ademola Adebowale · Community Choice, Advanced DeFi · <a href="https://github.com/Ghost-xDD/Stratum-FI">github.com/Ghost-xDD/Stratum-FI</a></p>
   <p><strong>What they shipped:</strong> Deposit BTC → singleton VaultController pairs it with protocol-owned MUSD in a Tigris LP → mint <code>bMUSD</code> synthetic against the position → harvester bot claims LP fees → DebtManager decrements user debt. "Zero interest, zero liquidation risk" — because there's no real CDP to liquidate. <strong>They do not use <code>BorrowerOperations</code>.</strong> Frontend at stratumfi.xyz returns 404. Last meaningful commit Nov 3, 2025.</p>
-  <p><strong>AURA's differentiation:</strong></p>
+  <p><strong>mezoCircles's differentiation:</strong></p>
   <ul>
     <li><strong>"The honest version."</strong> Real Mezo Trove, real MUSD users can spend anywhere — not a wrapper IOU locked in one protocol's LP.</li>
-    <li><strong>Yield-source diversification.</strong> StratumFi is 100% dependent on Tigris LP volume. AURA can route auto-repay yield from MUSD Savings Vault + Boar Finance veBTC + other sources.</li>
+    <li><strong>Yield-source diversification.</strong> StratumFi is 100% dependent on Tigris LP volume. mezoCircles can route auto-repay yield from MUSD Savings Vault + Boar Finance veBTC + other sources.</li>
     <li><strong>Per-user Trove isolation.</strong> Their pooled architecture socializes blow-ups; per-user vaults don't.</li>
   </ul>
 </div>
@@ -150,12 +150,12 @@
     <span class="pill different">DIFFERENT PROBLEM</span></div>
   <p class="lead">Vitaliy R · 1st place, Advanced DeFi · <a href="https://github.com/VitalR/mezo-trovepilot">github.com/VitalR/mezo-trovepilot</a></p>
   <p><strong>What they shipped:</strong> Protocol-side keeper toolkit. Automates liquidations (single + batch) and redemptions (hinted, with Tigris swap-redeem-rebalance arb loop). Single <code>TrovePilotEngine.sol</code> wrapper + TypeScript SDK + reference bots. Pass-through custody, off-chain logic, no on-chain registry. Active development — last push 2026-01-20. Deployed on Mezo testnet at <code>0x878a85eaaF24902fD6985d3CB2D51a299E33F43c</code>.</p>
-  <p><strong>Roadmap explicitly excludes:</strong> borrower-focused automation, yield strategies, per-user vaults, Stability Pool automation — i.e., everything AURA does.</p>
-  <p><strong>What AURA should steal:</strong></p>
+  <p><strong>Roadmap explicitly excludes:</strong> borrower-focused automation, yield strategies, per-user vaults, Stability Pool automation — i.e., everything mezoCircles does.</p>
+  <p><strong>What mezoCircles should steal:</strong></p>
   <ul>
     <li><code>recipient</code>-pattern: vault forwards all proceeds to caller-specified address. Clean.</li>
     <li>Thin on-chain, fat off-chain SDK — easier to iterate, lighter audit surface.</li>
-    <li>Pair AURA in the pitch as the "borrower-side complement to TrovePilot" — judges (Andre) explicitly thought in pairs.</li>
+    <li>Pair mezoCircles in the pitch as the "borrower-side complement to TrovePilot" — judges (Andre) explicitly thought in pairs.</li>
   </ul>
 </div>
 
@@ -164,7 +164,7 @@
     <span class="pill partial">PARTIAL COVERAGE</span></div>
   <p class="lead">Janice Gathoga, Tevin Isaac · 1st place, Daily Bitcoin · <a href="https://github.com/Invoiced-Mezo-Hackathon/invoiced-dashboard">github.com/Invoiced-Mezo-Hackathon</a></p>
   <p><strong>What they shipped:</strong> Solid invoicing UI + Boar Network WebSocket for BTC payment detection. Live at <a href="https://binvoiced.xyz">binvoiced.xyz</a>. The lending side is a <strong>mock</strong>: their <code>MUSDToken</code> is an ERC-20 they mint themselves with hardcoded $50,000 BTC price. Their config references <code>BORROW_MANAGER=0x123...</code> placeholders. The user must manually call <code>depositCollateral</code> → <code>borrowMUSD</code> in separate transactions. Last commit 2026-03-24.</p>
-  <p><strong>The opening for AURA:</strong> Ship a <code>paymentReceived(address freelancer, uint256 btc)</code> hook on AuraVault. Invoiced (or any payment processor) can call it to atomically route a received BTC payment into a real Mezo Trove and mint real MUSD. <em>Turn the 1st-place winner into your upstream integration, not your competitor.</em></p>
+  <p><strong>The opening for mezoCircles:</strong> Ship a <code>paymentReceived(address freelancer, uint256 btc)</code> hook on MezoCirclesVault. Invoiced (or any payment processor) can call it to atomically route a received BTC payment into a real Mezo Trove and mint real MUSD. <em>Turn the 1st-place winner into your upstream integration, not your competitor.</em></p>
 </div>
 
 <div class="project">
@@ -172,7 +172,7 @@
     <span class="pill adjacent">ADJACENT REFERRAL</span></div>
   <p class="lead">Manan Singhal · 2nd place, Advanced DeFi · <a href="https://github.com/MananSinghal123/musd">github.com/MananSinghal123/musd</a></p>
   <p><strong>What they shipped:</strong> A reversible-call-option marketplace where a "supporter" injects BTC into an unhealthy Trove in exchange for the right to take it over at maturity. Real working demo (option exercised on-chain, verified in MetaMask). <strong>Built on a fork of <code>mezo-org/musd</code></strong> — they had to whitelist their <code>ReversibleCallOptionManager</code> in the protocol core to call privileged functions like <code>TroveManager.increaseTroveColl</code>. Deployed at <code>0x3B1817EFf525190cd4D395c2586BA55bd4702314</code>.</p>
-  <p><strong>Why AURA can't absorb this directly:</strong> AURA is a third-party wrapper on the canonical MUSD protocol. We don't have the privileged-caller status BTCShield's protocol fork gave itself. AURA could build a wrapped imitation (rescuer sends MUSD → AuraVault calls <code>repayMUSD</code> → NFT ownership transfer), but it's a meaningful v2 feature, not a checkbox.</p>
+  <p><strong>Why mezoCircles can't absorb this directly:</strong> mezoCircles is a third-party wrapper on the canonical MUSD protocol. We don't have the privileged-caller status BTCShield's protocol fork gave itself. mezoCircles could build a wrapped imitation (rescuer sends MUSD → MezoCirclesVault calls <code>repayMUSD</code> → NFT ownership transfer), but it's a meaningful v2 feature, not a checkbox.</p>
 </div>
 
 <h2>What the judges actually rewarded</h2>
@@ -192,7 +192,7 @@
     Diplomatically silent gap: no team showed real testnet users beyond demo accounts. Adoption metrics were absent.</div>
 </div>
 
-<h2>AURA's revised positioning</h2>
+<h2>mezoCircles's revised positioning</h2>
 
 <p><strong>Pitch in one line:</strong> "The honest Trove autopilot. Real Mezo MUSD. Real per-user vault. Yield routes from real sources. No synthetic wrappers, no mock tokens."</p>
 
@@ -201,7 +201,7 @@
   <li>vs <strong>StratumFi</strong> — they sidestep Trove with synthetics; we are the real thing.</li>
   <li>vs <strong>TrovePilot</strong> — we are the borrower-side complement, not a substitute.</li>
   <li>vs <strong>Invoiced</strong> — we are the real-MUSD rails their mock-token vault never built. Offer to integrate.</li>
-  <li>vs <strong>BTCShield</strong> — different layer; AuraVault could opt-in to a rescuer marketplace someday.</li>
+  <li>vs <strong>BTCShield</strong> — different layer; MezoCirclesVault could opt-in to a rescuer marketplace someday.</li>
   <li>vs <strong>everyone else</strong> — different ICPs.</li>
 </ul>
 
@@ -220,7 +220,7 @@
   <li><strong>Anything cross-chain</strong> (Wormhole NTT, Base off-ramp). No winner needed it. Mezo-native is rewarded.</li>
   <li><strong>"Locked 1% rate" copy.</strong> Already cut after the technical audit; reinforced here because StratumFi tried "zero interest, zero liquidation" and judges didn't reward the pitch — they rewarded the mechanic. Lead with the mechanic.</li>
   <li><strong>Account Abstraction / passkeys.</strong> Confirmed dead on Mezo. Use Mezo Passport like CreatorBank and Invoiced did.</li>
-  <li><strong>The "freelancer rent money" framing.</strong> Invoiced owns that pitch. AURA is the treasury layer behind any payment processor, not a freelancer-specific tool.</li>
+  <li><strong>The "freelancer rent money" framing.</strong> Invoiced owns that pitch. mezoCircles is the treasury layer behind any payment processor, not a freelancer-specific tool.</li>
 </ul>
 
 <div class="meta">

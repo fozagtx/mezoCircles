@@ -2,7 +2,7 @@
 pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
-import {AuraVault} from "../src/AuraVault.sol";
+import {MezoCirclesVault} from "../src/MezoCirclesVault.sol";
 import {IBorrowerOperations} from "../src/interfaces/IBorrowerOperations.sol";
 import {ITroveManager} from "../src/interfaces/ITroveManager.sol";
 import {IMUSD} from "../src/interfaces/IMUSD.sol";
@@ -11,18 +11,18 @@ import {IMUSD} from "../src/interfaces/IMUSD.sol";
 ///         Verifies our interfaces match deployed bytecode. Run with:
 ///
 ///           MEZO_TESTNET_RPC_URL=https://rpc.test.mezo.org \
-///             forge test --match-contract AuraVaultForkTest \
+///             forge test --match-contract MezoCirclesVaultForkTest \
 ///             --fork-url $MEZO_TESTNET_RPC_URL -vv
 ///
 ///         Skipped automatically when MEZO_TESTNET_RPC_URL is not set so CI
 ///         without a fork URL stays green.
-contract AuraVaultForkTest is Test {
+contract MezoCirclesVaultForkTest is Test {
     address constant BORROWER_OPS  = 0xa14cbA6DD12D537A8decc7dd3c4aC413B8711eba;
     address constant TROVE_MANAGER = 0x7FE0A5a7EeBD88530c58824475edEae33424671F;
     address constant MUSD          = 0x118917a40FAF1CD7a13dB0Ef56C86De7973Ac503;
 
-    AuraVault internal vault;
-    address internal user = makeAddr("aura-fork-user");
+    MezoCirclesVault internal vault;
+    address internal user = makeAddr("mezocircles-fork-user");
 
     function setUp() public {
         try vm.envString("MEZO_TESTNET_RPC_URL") returns (string memory) {
@@ -37,7 +37,7 @@ contract AuraVaultForkTest is Test {
             MUSD.staticcall(abi.encodeWithSignature("symbol()"));
         require(ok && data.length > 0, "MUSD not present at expected address - wrong fork?");
 
-        vault = new AuraVault(user, BORROWER_OPS, TROVE_MANAGER, MUSD);
+        vault = new MezoCirclesVault(user, BORROWER_OPS, TROVE_MANAGER, MUSD);
         vm.deal(user, 100 ether);
     }
 

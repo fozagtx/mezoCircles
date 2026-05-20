@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-/// @notice Subset of Mezo's BorrowerOperations (simplified Liquity fork) used by AuraVault.
+/// @notice Subset of Mezo's BorrowerOperations (simplified Liquity fork) used by MezoCirclesVault.
 /// @dev    Signatures verified by direct cast probes against deployed BorrowerOperations
 ///         at 0xa14cbA6DD12D537A8decc7dd3c4aC413B8711eba on Mezo testnet (chainId 31611).
 ///         Source: github.com/mezo-org/musd/blob/main/solidity/contracts/BorrowerOperations.sol

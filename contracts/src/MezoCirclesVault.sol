@@ -5,18 +5,18 @@ import {IBorrowerOperations} from "./interfaces/IBorrowerOperations.sol";
 import {ITroveManager} from "./interfaces/ITroveManager.sol";
 import {IMUSD} from "./interfaces/IMUSD.sol";
 
-/// @title AuraVault
+/// @title MezoCirclesVault
 /// @notice Per-user vault that owns a single Mezo MUSD Trove on the user's behalf.
 ///         Wraps BorrowerOperations so the owner gets simple deposit / borrow /
 ///         repay / close calls without juggling hints manually.
-/// @dev    One AuraVault instance == one Mezo Trove. Each user deploys (or has
-///         a factory deploy) their own vault. The vault address is the Trove
+/// @dev    One MezoCirclesVault instance == one Mezo Trove. Each user deploys (or
+///         has a factory deploy) their own vault. The vault address is the Trove
 ///         owner from BorrowerOperations' perspective.
 ///
 ///         Mezo's MUSD is a simplified Liquity fork — there is NO per-trove
 ///         maxFee or interestRate parameter; rates are governed protocol-wide
 ///         by InterestRateManager. See docs/research/mezo-validation.md.
-contract AuraVault {
+contract MezoCirclesVault {
     address public immutable owner;
     IBorrowerOperations public immutable borrowerOps;
     ITroveManager public immutable troveManager;

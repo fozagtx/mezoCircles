@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-/// @notice Subset of Mezo's TroveManager (Liquity-v2 fork) used by AuraVault.
+/// @notice Subset of Mezo's TroveManager (Liquity-v2 fork) used by MezoCirclesVault.
 /// @dev Source: github.com/mezo-org/musd. Status enum + getters mirror Liquity.
 interface ITroveManager {
     enum Status {

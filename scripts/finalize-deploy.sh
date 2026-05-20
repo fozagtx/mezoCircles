@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Close the deploy loop:
-#   1. verify view fns on the deployed AuraVault
+#   1. verify view fns on the deployed MezoCirclesVault
 #   2. fill the README.md Deployments table row with the address + tx + block
 #   3. (optional --commit) stage README.md + contracts/broadcast/ and commit
 #
@@ -27,12 +27,12 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
 
 # --- 1. verify ---
-echo "▶ Step 1/3 — verify deployed AuraVault"
+echo "▶ Step 1/3 — verify deployed MezoCirclesVault"
 bash scripts/verify-deploy.sh "$VAULT"
 echo ""
 
 # --- 2. read tx + block from broadcast artifact (best-effort) ---
-BROADCAST_FILE="contracts/broadcast/DeployAuraVault.s.sol/31611/run-latest.json"
+BROADCAST_FILE="contracts/broadcast/DeployMezoCirclesVault.s.sol/31611/run-latest.json"
 TX_HASH="—"
 BLOCK="—"
 if [ -f "$BROADCAST_FILE" ]; then
@@ -53,12 +53,12 @@ fi
 # --- 3. patch README Deployments table ---
 echo "▶ Step 2/3 — patch README.md Deployments row"
 if [ ! -f .env.deploy ]; then
-  echo "❌ .env.deploy not found — needed to read AURA_VAULT_OWNER" >&2
+  echo "❌ .env.deploy not found — needed to read MEZOCIRCLES_VAULT_OWNER" >&2
   exit 1
 fi
 # shellcheck source=/dev/null
 source .env.deploy
-OWNER="${AURA_VAULT_OWNER}"
+OWNER="${MEZOCIRCLES_VAULT_OWNER}"
 
 # Use python for the in-place edit — sed quoting across platforms is a minefield.
 python3 - "$VAULT" "$OWNER" "$BLOCK" "$TX_HASH" <<'PY'
@@ -86,7 +86,7 @@ if [ "$DO_COMMIT" = "--commit" ]; then
     git add contracts/broadcast
   fi
   git status --short
-  git commit -m "feat(deploy): AuraVault on Mezo testnet at ${VAULT}
+  git commit -m "feat(deploy): MezoCirclesVault on Mezo testnet at ${VAULT}
 
 tx:    ${TX_HASH}
 block: ${BLOCK}

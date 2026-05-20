@@ -2,13 +2,13 @@
 pragma solidity ^0.8.24;
 
 import {Test} from "forge-std/Test.sol";
-import {AuraVault} from "../src/AuraVault.sol";
+import {MezoCirclesVault} from "../src/MezoCirclesVault.sol";
 import {MockMUSD} from "./mocks/MockMUSD.sol";
 import {MockTroveManager} from "./mocks/MockTroveManager.sol";
 import {MockBorrowerOperations} from "./mocks/MockBorrowerOperations.sol";
 
-contract AuraVaultTest is Test {
-    AuraVault internal vault;
+contract MezoCirclesVaultTest is Test {
+    MezoCirclesVault internal vault;
     MockMUSD internal musd;
     MockTroveManager internal troveManager;
     MockBorrowerOperations internal borrowerOps;
@@ -23,7 +23,7 @@ contract AuraVaultTest is Test {
         troveManager = new MockTroveManager();
         borrowerOps = new MockBorrowerOperations(musd, troveManager);
 
-        vault = new AuraVault(user, address(borrowerOps), address(troveManager), address(musd));
+        vault = new MezoCirclesVault(user, address(borrowerOps), address(troveManager), address(musd));
         vm.deal(user, 100 ether);
     }
 
@@ -41,13 +41,13 @@ contract AuraVaultTest is Test {
         address stranger = address(0xCAFE);
         vm.deal(stranger, BTC_DEPOSIT);
         vm.prank(stranger);
-        vm.expectRevert(AuraVault.NotOwner.selector);
+        vm.expectRevert(MezoCirclesVault.NotOwner.selector);
         vault.openVault{value: BTC_DEPOSIT}(MUSD_BORROW, address(0), address(0));
     }
 
     function test_openVault_revertsOnZeroBTC() public {
         vm.prank(user);
-        vm.expectRevert(AuraVault.ZeroAmount.selector);
+        vm.expectRevert(MezoCirclesVault.ZeroAmount.selector);
         vault.openVault(MUSD_BORROW, address(0), address(0));
     }
 
