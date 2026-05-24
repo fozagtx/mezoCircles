@@ -8,21 +8,11 @@ import {
   MotionWorkbench,
   MotionWorkbenchGrid,
 } from "@/components/PageMotion";
-import { MEZO_TESTNET, VAULT_ADDRESS } from "@/lib/mezo";
+import { MEZO_TESTNET } from "@/lib/mezo";
 
 export default function App() {
   return (
     <MotionWorkbench>
-      <header className="workbench-header">
-        <div>
-          <p className="workbench-kicker">No selling. No wrapping. No bank.</p>
-          <h1>Borrow MUSD against BTC</h1>
-        </div>
-        <div className="workbench-meta" aria-label="Deployment state">
-          <span>{VAULT_ADDRESS ? "Ready" : "Setup needed"}</span>
-        </div>
-      </header>
-
       <MotionWorkbenchGrid>
         <MotionAside>
           <div className="panel-heading">
