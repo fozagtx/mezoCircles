@@ -46,6 +46,7 @@ export function VaultStatus() {
   if (!VAULT_ADDRESS) {
     return (
       <div className="card status-card monitor-card">
+        <PositionCardHeading />
         <StatusTop
           eyebrow="Liquidity monitor"
           title="Waiting for position"
@@ -69,6 +70,7 @@ export function VaultStatus() {
   if (isLoading) {
     return (
       <div className="card status-card monitor-card" aria-busy="true">
+        <PositionCardHeading />
         <StatusTop eyebrow="Liquidity monitor" title="Reading position" tone="neutral" label="Syncing" />
         <SkeletonRows count={4} />
         {priceRow && <div className="status-rows">{priceRow}</div>}
@@ -130,6 +132,7 @@ export function VaultStatus() {
         <LiquidationBanner zone={zone} icrPct={icr ?? 0} />
       )}
       <div className="card status-card monitor-card">
+        <PositionCardHeading />
         <StatusTop eyebrow="Liquidity monitor" title={statusLabel} tone={statusTone} label={statusLabel} />
 
         {isActive && hasPosition ? (
@@ -181,6 +184,20 @@ export function VaultStatus() {
         </div>
       </div>
     </>
+  );
+}
+
+function PositionCardHeading() {
+  return (
+    <div className="position-card-heading">
+      <div>
+        <h2 className="section-eyebrow">Position</h2>
+        <span>Your BTC and MUSD</span>
+      </div>
+      <a href="#borrowing-limits" className="card-jump-link">
+        Limits
+      </a>
+    </div>
   );
 }
 
@@ -236,6 +253,7 @@ function StateCard({
 }) {
   return (
     <div className={`card state-card state-${tone}`}>
+      <PositionCardHeading />
       <StatusTop eyebrow={eyebrow} title={title} tone={tone} label={title} />
       <p className="state-note">{detail}</p>
       {children && <div className="status-rows">{children}</div>}

@@ -12,7 +12,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     return (
       <div className="app-shell app-shell-locked">
         <div className="app-shell-background" aria-hidden="true" inert>
-          <Sidebar />
+          <Sidebar showGuide={false} />
           <main className="app-main lock-preview">
             <div className="lock-preview-grid">
               <section className="card lock-preview-card">

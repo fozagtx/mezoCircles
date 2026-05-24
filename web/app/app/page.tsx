@@ -15,10 +15,6 @@ export default function App() {
     <MotionWorkbench>
       <MotionWorkbenchGrid>
         <MotionAside>
-          <div className="panel-heading">
-            <h2 className="section-eyebrow">Position</h2>
-            <span>Your BTC and MUSD</span>
-          </div>
           <VaultStatus />
           <Constraints />
         </MotionAside>
@@ -44,7 +40,7 @@ function Constraints() {
     ["MUSD", shortAddr(MEZO_TESTNET.musd)],
   ];
   return (
-    <div className="card protocol-card">
+    <div id="borrowing-limits" className="card protocol-card">
       <h3 className="section-eyebrow">Borrowing limits</h3>
       {items.map(([k, v]) => (
         <div key={k} className="card-row">

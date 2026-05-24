@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useAccount, useDisconnect } from "wagmi";
 import { ConnectKitButton } from "connectkit";
+import { GettingStartedGuide } from "@/components/GettingStartedGuide";
 
 function shortAddr(a: string): string {
   return `${a.slice(0, 6)}…${a.slice(-4)}`;
 }
 
-export function Sidebar() {
+export function Sidebar({ showGuide = true }: { showGuide?: boolean }) {
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
 
@@ -18,6 +19,7 @@ export function Sidebar() {
         <Link href="/" className="sidebar-wordmark">
           mezoCircles
         </Link>
+        {showGuide && <GettingStartedGuide />}
       </div>
 
       <div className="sidebar-bottom">
