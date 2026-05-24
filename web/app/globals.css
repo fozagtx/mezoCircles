@@ -1195,11 +1195,12 @@ body {
   backdrop-filter: blur(18px) saturate(112%);
 }
 .connect-gate {
-  width: min(100%, 29rem);
+  width: fit-content;
+  max-width: calc(100vw - (var(--space-lg) * 2));
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 5.5rem;
+  grid-template-columns: auto auto;
   gap: var(--space-md);
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   box-shadow: 0 28px 70px -32px oklch(0% 0 0 / 0.34);
 }
@@ -1221,8 +1222,8 @@ body {
 }
 .connect-arrow-animation {
   position: relative;
-  width: 5.5rem;
-  height: 5.5rem;
+  width: 4.5rem;
+  height: 4.5rem;
   display: block;
   overflow: hidden;
   border: 1px solid var(--color-accent);
@@ -1250,7 +1251,7 @@ body {
   height: 100%;
   color: var(--color-ink);
   font-family: var(--font-mono);
-  font-size: 3.25rem;
+  font-size: 2.75rem;
   font-weight: 700;
   line-height: 1;
   animation: connect-arrow-slide 1.2s var(--ease-out) infinite;
