@@ -19,6 +19,15 @@ The hackathon scope is intentionally narrow. See `docs/research/mezo-validation.
 - [ ] Auto-yield keeper (deferred to week 3)
 - [ ] Account abstraction / passkeys (cut from v1 — no Mezo support)
 
+## Expansion lanes
+
+Reputation-based lending, AI automation, and RWA yield/credit are tracked as
+future research lanes, not v1 features. See `docs/research/expansion-lanes.md`.
+
+Current recommendation: keep the live product focused on BTC-backed borrowing,
+then add liquidation protection and repayment automation before exploring any
+RWA or undercollateralized credit surface.
+
 ## Known constraints (validated against Mezo deployment)
 
 - **Min debt per Trove: 1,800 MUSD.** Cannot serve sub-$2k positions.
