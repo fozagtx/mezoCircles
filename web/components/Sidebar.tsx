@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useAccount, useDisconnect } from "wagmi";
 import { ConnectKitButton } from "connectkit";
@@ -16,7 +17,14 @@ export function Sidebar() {
     <aside className="sidebar" aria-label="App navigation">
       <div className="sidebar-top">
         <Link href="/" className="sidebar-wordmark">
-          mezoCircles
+          <Image
+            src="/7kdk10p5h9j.png"
+            alt="mezoCircles"
+            width={1024}
+            height={1024}
+            className="sidebar-logo"
+            priority
+          />
         </Link>
       </div>
 
