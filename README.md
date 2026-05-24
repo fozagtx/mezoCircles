@@ -1,10 +1,10 @@
 # mezoCircles
 
-One-click Mezo Trove manager. Deposit BTC, mint MUSD, hold yield-bearing savings — without juggling hints, fee bounds, or trove bookkeeping.
+Borrow dollars against your Bitcoin. Deposit BTC, borrow MUSD, and repay when ready — no selling, no wrapping, no bank.
 
 ## What this is
 
-`MezoCirclesVault` is a per-user smart contract that owns a single Mezo MUSD Trove on behalf of its owner. The owner gets four operations — `openVault`, `addCollateral`, `repayDebt`, `closeVault` — instead of the raw Liquity-v2-fork surface. Future work bolts on auto-yield routing (MUSD → MUSD Savings Vault) and a keeper that auto-repays debt from yield.
+`MezoCirclesVault` is a per-user smart contract that owns a single Mezo MUSD Trove on behalf of its owner. The owner gets four operations — `openVault`, `addCollateral`, `repayDebt`, `closeVault` — instead of the raw Liquity-v2-fork surface. Future work can add liquidation protection and repayment automation, but v1 is intentionally focused on simple BTC-backed borrowing.
 
 The hackathon scope is intentionally narrow. See `docs/research/mezo-validation.md` for the validated facts about Mezo that informed which features are in v1 vs deferred.
 
@@ -14,8 +14,8 @@ The hackathon scope is intentionally narrow. See `docs/research/mezo-validation.
 - [x] Mock-based unit tests (7/7 passing)
 - [x] Deploy script targeting Mezo testnet
 - [x] Mezo capability audit (`docs/research/mezo-validation.md`)
-- [ ] Mezo testnet deploy + manual e2e test
-- [ ] Frontend (deferred to week 5)
+- [x] Mezo testnet deploy + manual e2e test
+- [x] Frontend
 - [ ] Auto-yield keeper (deferred to week 3)
 - [ ] Account abstraction / passkeys (cut from v1 — no Mezo support)
 
@@ -72,7 +72,12 @@ MEZO_TESTNET_RPC_URL=https://rpc.test.mezo.org \
 
 | Network | MezoCirclesVault | Owner | Block | Tx |
 |---|---|---|---|---|
-| Mezo testnet (31611) | _(awaiting first deploy)_ | — | — | — |
+| Mezo testnet (31611) | `0x073F9b59442e63f03b96D2aDe16dc37d40929e20` | `0xBb67c7386e1e4Fb9931129CA09FE577F4B3fFb97` | 13255204 | `0x88d70480ddfb44d90e707f21e3466100164a899023f35db1590794cd10a4973d` |
+
+Manual e2e open-vault check: `0x01fb54dbc006c09d6a4b53cb9c0f7d575289f88f9278e479e7ab311d64412327`
+opened a live Mezo testnet Trove with 0.001 BTC collateral. The vault forwarded 1,800 MUSD
+to the owner wallet; the on-chain Trove debt reads higher because Mezo adds protocol debt/fees
+on top of the borrowed amount.
 
 ## History
 
