@@ -29,9 +29,8 @@ export default function Landing() {
         <section className="below">
           <div className="lede">
             <p>
-              mezoCircles is a per-user vault on the Mezo network. Deposit BTC,
-              mint MUSD against it, hold dollar liquidity without selling the
-              underlying Bitcoin. Repay when ready and your BTC is released back.
+              No selling, no wrapping, no bank. Deposit BTC, borrow MUSD, and
+              repay when ready to release your Bitcoin back.
             </p>
           </div>
 

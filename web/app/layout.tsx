@@ -7,7 +7,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "mezoCircles",
   description:
-    "Borrow MUSD against your Bitcoin. A per-user Mezo Trove manager — open, add collateral, repay, close. Deployed on Mezo testnet.",
+    "Borrow dollars against your Bitcoin. Deposit BTC, borrow MUSD, and repay when ready. No selling, no wrapping, no bank.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

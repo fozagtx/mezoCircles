@@ -9,8 +9,8 @@ export default function App() {
     <main className="workbench">
       <header className="workbench-header">
         <div>
-          <p className="workbench-kicker">Mezo testnet</p>
-          <h1>Borrow MUSD</h1>
+          <p className="workbench-kicker">No selling. No wrapping. No bank.</p>
+          <h1>Borrow MUSD against BTC</h1>
         </div>
         <div className="workbench-meta" aria-label="Deployment state">
           <span>{VAULT_ADDRESS ? "Ready" : "Setup needed"}</span>

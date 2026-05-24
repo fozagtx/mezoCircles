@@ -1,10 +1,10 @@
 # mezoCircles
 
-One-click Mezo Trove manager. Deposit BTC, mint MUSD, hold yield-bearing savings — without juggling hints, fee bounds, or trove bookkeeping.
+Borrow dollars against your Bitcoin. Deposit BTC, borrow MUSD, and repay when ready — no selling, no wrapping, no bank.
 
 ## What this is
 
-`MezoCirclesVault` is a per-user smart contract that owns a single Mezo MUSD Trove on behalf of its owner. The owner gets four operations — `openVault`, `addCollateral`, `repayDebt`, `closeVault` — instead of the raw Liquity-v2-fork surface. Future work bolts on auto-yield routing (MUSD → MUSD Savings Vault) and a keeper that auto-repays debt from yield.
+`MezoCirclesVault` is a per-user smart contract that owns a single Mezo MUSD Trove on behalf of its owner. The owner gets four operations — `openVault`, `addCollateral`, `repayDebt`, `closeVault` — instead of the raw Liquity-v2-fork surface. Future work can add liquidation protection and repayment automation, but v1 is intentionally focused on simple BTC-backed borrowing.
 
 The hackathon scope is intentionally narrow. See `docs/research/mezo-validation.md` for the validated facts about Mezo that informed which features are in v1 vs deferred.
 
