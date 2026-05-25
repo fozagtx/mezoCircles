@@ -2,7 +2,8 @@
 
 import { VaultStatus } from "@/components/VaultStatus";
 import { VaultActions } from "@/components/VaultActions";
-import { GettingStartedGuide } from "@/components/GettingStartedGuide";
+import { DashboardDemo } from "@/components/DashboardDemo";
+import { PaybackCalculator } from "@/components/PaybackCalculator";
 import {
   MotionAside,
   MotionSection,
@@ -25,10 +26,11 @@ export default function App() {
             <h2 className="section-eyebrow">Actions</h2>
             <div className="panel-tools">
               <span>Open, repay, close</span>
-              <GettingStartedGuide />
+              <DashboardDemo />
             </div>
           </div>
           <VaultActions />
+          <PaybackCalculator />
         </MotionSection>
       </MotionWorkbenchGrid>
     </MotionWorkbench>

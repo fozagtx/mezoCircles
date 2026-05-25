@@ -311,14 +311,19 @@ export function VaultActions() {
         </ActionGroup>
       ) : (
         <>
-          <ActionGroup heading="Add collateral" hint="Top up BTC to improve ICR.">
+          <ActionGroup
+            className="action-group-compact"
+            heading="Add collateral"
+            hint="Top up BTC to improve ICR."
+          >
             <Field label="Add (BTC)" value={addBtc} onChange={setAddBtc} placeholder="0.5" />
             <Button onClick={addColl} disabled={baseDisabled || addAmount === 0n}>Add collateral</Button>
           </ActionGroup>
 
           <ActionGroup
+            className="action-group-compact"
             heading="Repay debt"
-            hint="Burn MUSD to reduce debt. Approve MUSD first so repayment can go through."
+            hint="Burn MUSD to reduce debt. Approval may be required."
           >
             <Field label="Repay (MUSD)" value={repayMusd} onChange={setRepayMusd} placeholder="100" />
             {repayNeedsApproval ? (
@@ -336,8 +341,9 @@ export function VaultActions() {
           </ActionGroup>
 
           <ActionGroup
+            className="action-group-compact"
             heading="Close position"
-            hint="Pay off all outstanding debt and withdraw all BTC. Requires MUSD approval for the full debt."
+            hint="Repay full debt and withdraw BTC. Approval may be required."
           >
             {debt > 0n && (
               <div className="card-row">
@@ -347,7 +353,7 @@ export function VaultActions() {
             )}
             {closeNeedsApproval ? (
               <Button onClick={() => approveMusd(debt)} disabled={baseDisabled}>
-                Approve {formatMusd(debt)} MUSD for close
+                Approve close
               </Button>
             ) : (
               <Button onClick={close} disabled={baseDisabled}>
@@ -482,13 +488,17 @@ function ActionGroup({
   heading,
   hint,
   children,
+  className,
 }: {
   heading: string;
   hint: string;
   children: React.ReactNode;
+  className?: string;
 }) {
+  const groupClassName = className ? `action-group ${className}` : "action-group";
+
   return (
-    <div className="action-group">
+    <div className={groupClassName}>
       <div>
         <h3>{heading}</h3>
         <p className="hint">{hint}</p>

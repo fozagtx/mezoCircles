@@ -12,6 +12,7 @@
   "dependencies": {
     "@tanstack/react-query": "5.100.11",
     "connectkit": "1.9.2",
+    "driver.js": "1.4.0",
     "framer-motion": "12.40.0",
     "geist": "1.7.0",
     "next": "16.2.6",
