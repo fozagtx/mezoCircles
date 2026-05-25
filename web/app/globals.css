@@ -11,6 +11,7 @@
 
 @theme {
   --color-paper:      oklch(99% 0.005 80);
+  --color-smoke-white: oklch(97.5% 0.003 90);
   --color-paper-2:    oklch(96% 0.008 80);
   --color-paper-3:    oklch(93% 0.01 80);
   --color-ink:        oklch(15% 0.01 80);
@@ -1303,6 +1304,7 @@ body {
 
 .app-shell {
   min-height: 100dvh;
+  background: var(--color-smoke-white);
 }
 .app-shell-locked {
   position: relative;

@@ -1,12 +1,67 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { ConnectKitButton } from "connectkit";
+import { driver } from "driver.js";
 import { useAccount } from "wagmi";
 import { Sidebar } from "@/components/Sidebar";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { isConnected, status } = useAccount();
   const isCheckingWallet = status === "connecting" || status === "reconnecting";
+  const connectPromptRef = useRef<ReturnType<typeof driver> | null>(null);
+  const promptShownRef = useRef(false);
+
+  useEffect(() => {
+    if (isConnected) {
+      promptShownRef.current = false;
+      connectPromptRef.current?.destroy();
+      connectPromptRef.current = null;
+      return;
+    }
+
+    if (isCheckingWallet || promptShownRef.current) return;
+
+    const promptTimer = window.setTimeout(() => {
+      if (!document.querySelector(".connect-again-trigger")) return;
+
+      const connectPrompt = driver({
+        steps: [
+          {
+            element: ".connect-again-trigger",
+            popover: {
+              title: "Connect wallet",
+              description: "Click Connect again to unlock the dashboard.",
+              side: "right",
+              align: "center",
+            },
+          },
+        ],
+        animate: true,
+        overlayColor: "#11100d",
+        overlayOpacity: 0.16,
+        allowClose: true,
+        allowKeyboardControl: true,
+        overlayClickBehavior: "close",
+        stagePadding: 8,
+        stageRadius: 4,
+        popoverClass: "mezo-driver-popover",
+        popoverOffset: 12,
+        showButtons: ["close"],
+        doneBtnText: "Got it",
+      });
+
+      connectPromptRef.current = connectPrompt;
+      promptShownRef.current = true;
+      connectPrompt.drive();
+    }, 220);
+
+    return () => window.clearTimeout(promptTimer);
+  }, [isConnected, isCheckingWallet]);
+
+  useEffect(() => {
+    return () => connectPromptRef.current?.destroy();
+  }, []);
 
   if (!isConnected) {
     return (
@@ -55,7 +110,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <div className="connect-gate-actions">
                     <ConnectKitButton.Custom>
                       {({ show }) => (
-                        <button type="button" onClick={show} className="sidebar-connect" autoFocus>
+                        <button
+                          type="button"
+                          onClick={show}
+                          className="sidebar-connect connect-again-trigger"
+                          autoFocus
+                        >
                           Connect again
                         </button>
                       )}
